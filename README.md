@@ -1,0 +1,1 @@
+# persornal-trading-journal-fullstack
