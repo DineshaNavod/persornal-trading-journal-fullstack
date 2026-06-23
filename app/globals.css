@@ -1,0 +1,191 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+* {
+  border-color: theme("colors.neutral.200");
+}
+
+.dark * {
+  border-color: theme("colors.neutral.800");
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  @apply bg-neutral-50 text-neutral-900 antialiased;
+  @apply dark:bg-neutral-950 dark:text-neutral-100;
+}
+
+::selection {
+  background: rgba(124, 92, 252, 0.25);
+}
+
+/* Slim, quiet scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: theme("colors.neutral.300");
+  border-radius: 999px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: theme("colors.neutral.700");
+}
+
+/* ---------- Shared component primitives ---------- */
+
+.card {
+  @apply rounded-2xl border border-neutral-150 bg-white shadow-softer dark:border-neutral-800 dark:bg-neutral-900;
+}
+
+.card-pad {
+  @apply p-5 sm:p-6;
+}
+
+.label-eyebrow {
+  @apply text-[11px] font-semibold uppercase tracking-wide text-neutral-400;
+}
+
+.btn {
+  @apply inline-flex items-center justify-center gap-1.5 rounded-xl px-3.5 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.btn-accent {
+  @apply btn bg-accent text-white shadow-sm hover:bg-accent-dark;
+}
+
+.btn-outline {
+  @apply btn border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800;
+}
+
+.btn-ghost {
+  @apply btn text-neutral-500 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800;
+}
+
+.input {
+  @apply w-full rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none transition focus:border-accent focus:ring-4 focus:ring-accent/15 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100;
+}
+
+/* All <select> elements inherit the .input look but hide the browser default arrow
+   (we render our own ChevronDown via JS where needed, or rely on the OS arrow
+   inside form selects that don't have a wrapper). */
+select.input {
+  @apply cursor-pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a0a0b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 2.5rem;
+}
+
+.field-label {
+  @apply mb-1.5 block text-[13px] font-medium text-neutral-600 dark:text-neutral-300;
+}
+
+.pill {
+  @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold;
+}
+
+.pill-profit {
+  @apply pill bg-profit-soft text-profit-dark dark:bg-profit/15 dark:text-profit;
+}
+
+.pill-loss {
+  @apply pill bg-loss-soft text-loss-dark dark:bg-loss/15 dark:text-loss;
+}
+
+.pill-neutral {
+  @apply pill bg-neutral-100 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400;
+}
+
+.pill-accent {
+  @apply pill bg-accent-light text-accent-deep dark:bg-accent/15 dark:text-accent;
+}
+
+/* ---------- FullCalendar theme override ---------- */
+
+.fc {
+  --fc-border-color: theme("colors.neutral.150");
+  --fc-today-bg-color: rgba(124, 92, 252, 0.06);
+  --fc-page-bg-color: transparent;
+  font-family: var(--font-sans);
+}
+
+.dark .fc {
+  --fc-border-color: theme("colors.neutral.800");
+}
+
+.fc .fc-toolbar-title {
+  @apply text-lg font-semibold text-neutral-900 dark:text-neutral-100;
+}
+
+.fc .fc-button {
+  @apply rounded-lg border border-neutral-200 bg-white text-neutral-600 shadow-none dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-300;
+  text-transform: capitalize;
+  padding: 0.4rem 0.75rem;
+}
+
+.fc .fc-button:hover {
+  @apply bg-neutral-50 dark:bg-neutral-800;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+  @apply bg-accent text-white border-accent;
+}
+
+.fc .fc-col-header-cell-cushion {
+  @apply py-2 text-xs font-semibold uppercase tracking-wide text-neutral-400;
+}
+
+.fc .fc-daygrid-day-number {
+  @apply px-2 py-1 text-sm text-neutral-600 dark:text-neutral-300;
+}
+
+.fc .fc-daygrid-day-frame {
+  min-height: 86px;
+}
+
+.fc .fc-daygrid-day.fc-day-profit .fc-daygrid-day-frame {
+  background: rgba(23, 165, 107, 0.08);
+}
+
+.fc .fc-daygrid-day.fc-day-loss .fc-daygrid-day-frame {
+  background: rgba(224, 71, 63, 0.08);
+}
+
+.fc .fc-daygrid-day-number {
+  width: 100%;
+  padding: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
