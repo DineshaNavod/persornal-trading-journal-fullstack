@@ -66,7 +66,7 @@ export function DayTradesModal({ date, trades, onClose, onSelectTrade }: {
 
         {/* Trades */}
         <div className="overflow-y-auto p-5" style={{ maxHeight: "calc(82vh - 72px)" }}>
-          <TradeTable trades={trades} onSelect={(t) => { onSelectTrade(t); onClose(); }} />
+          <TradeTable trades={trades} onSelect={onSelectTrade} />
         </div>
       </div>
     </div>

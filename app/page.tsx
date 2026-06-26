@@ -33,7 +33,7 @@ export default function DashboardPage() {
           value={formatR(metrics.avgR)}
           valueClassName={metrics.avgR >= 0 ? "text-profit-dark" : "text-loss-dark"} />
         <KpiCard icon={Scale} label="Profit factor"
-          value={metrics.profitFactor === Infinity ? "∞" : metrics.profitFactor.toFixed(2)} />
+          value={metrics.totalTrades === 0 ? "—" : metrics.profitFactor === Infinity ? "Perfect" : metrics.profitFactor.toFixed(2)} />
       </div>
 
       <AccountBalanceCard

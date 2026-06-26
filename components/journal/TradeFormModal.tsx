@@ -40,10 +40,19 @@ export function TradeFormModal({ onClose }: { onClose: () => void }) {
 
   const allImagesUploaded = IMAGE_SLOTS.every((s) => images[s.key]);
   const allChecked = Object.values(checklist).every(Boolean);
+  const entryNum  = Number(entry);
+  const slNum     = Number(stopLoss);
+  const tpNum     = Number(takeProfit);
+  const riskNum   = Number(riskDollar);
+  const profitNum = Number(profitDollar);
+
   const canSubmit =
-    symbolId && entry && stopLoss && takeProfit &&
-    riskDollar && Number(riskDollar) > 0 &&
-    profitDollar !== "" &&
+    symbolId &&
+    isFinite(entryNum)  && entry !== "" &&
+    isFinite(slNum)     && stopLoss !== "" &&
+    isFinite(tpNum)     && takeProfit !== "" &&
+    isFinite(riskNum)   && riskNum > 0 &&
+    isFinite(profitNum) && profitDollar !== "" &&
     allImagesUploaded && allChecked && !submitting;
 
   async function handleImageSelected(key: ImageKey, file: File) {
@@ -70,11 +79,11 @@ export function TradeFormModal({ onClose }: { onClose: () => void }) {
         strategy_id:       activeStrategy?.id ?? null,
         date:              new Date().toISOString(),
         direction,
-        entry_price:       Number(entry),
-        stop_loss_price:   Number(stopLoss),
-        take_profit_price: Number(takeProfit),
-        risk_dollar:       Number(riskDollar),
-        profit:            Number(profitDollar),
+        entry_price:       entryNum,
+        stop_loss_price:   slNum,
+        take_profit_price: tpNum,
+        risk_dollar:       riskNum,
+        profit:            profitNum,
         notes:             notes.trim() || null,
         checklist,
         htf_image_url: images.htf_image_url as string,

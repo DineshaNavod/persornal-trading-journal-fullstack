@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
-import { X, ArrowUpRight, ArrowDownRight, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { X, ArrowUpRight, ArrowDownRight, Trash2, AlertTriangle, Check } from "lucide-react";
 import { ImageViewer } from "@/components/review/ImageViewer";
 import { cn, formatCurrency, formatDateTime } from "@/lib/utils";
 import { CHECKLIST_ITEMS } from "@/lib/constants";
@@ -16,6 +16,7 @@ export function TradeReviewModal({
   onClose: () => void;
   onDelete?: (id: string) => void;
 }) {
+  const [confirming, setConfirming] = useState(false);
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
@@ -34,7 +35,8 @@ export function TradeReviewModal({
     { label: "LTF", description: "Lower timeframe", url: trade.ltf_image_url },
   ];
 
-  const isWin = trade.pnl >= 0;
+  const isWin  = trade.pnl > 0;
+  const isBreak = trade.pnl === 0;
 
   return (
     <div className="fixed inset-0 z-50 flex animate-fade-in flex-col bg-neutral-50 dark:bg-neutral-950">
@@ -54,7 +56,7 @@ export function TradeReviewModal({
               <h2 className="truncate text-base font-semibold text-neutral-900 dark:text-neutral-50">
                 {trade.symbol?.name ?? "Trade"}
               </h2>
-              <span className={isWin ? "pill-profit" : "pill-loss"}>{isWin ? "Win" : "Loss"}</span>
+              <span className={isWin ? "pill-profit" : isBreak ? "pill-neutral" : "pill-loss"}>{isWin ? "Win" : isBreak ? "B/E" : "Loss"}</span>
             </div>
             <p className="truncate text-xs text-neutral-400">{formatDateTime(trade.date)}</p>
           </div>
@@ -70,14 +72,35 @@ export function TradeReviewModal({
             {formatCurrency(trade.pnl, { sign: true })}
           </div>
           {onDelete && (
-            <button
-              type="button"
-              onClick={() => onDelete(trade.id)}
-              aria-label="Delete trade"
-              className="btn-ghost"
-            >
-              <Trash2 size={17} />
-            </button>
+            confirming ? (
+              <div className="flex items-center gap-2 rounded-xl border border-loss/30 bg-loss-soft px-3 py-1.5 dark:bg-loss/10">
+                <AlertTriangle size={14} className="shrink-0 text-loss-dark" />
+                <span className="text-xs font-medium text-loss-dark">Delete this trade?</span>
+                <button
+                  type="button"
+                  onClick={() => onDelete(trade.id)}
+                  className="flex items-center gap-1 rounded-lg bg-loss px-2 py-1 text-xs font-semibold text-white hover:bg-loss-dark"
+                >
+                  <Check size={12} /> Yes, delete
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirming(false)}
+                  className="rounded-lg px-2 py-1 text-xs font-medium text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setConfirming(true)}
+                aria-label="Delete trade"
+                className="btn-ghost text-neutral-400 hover:text-loss-dark"
+              >
+                <Trash2 size={17} />
+              </button>
+            )
           )}
           <button type="button" onClick={onClose} aria-label="Close review" className="btn-ghost">
             <X size={19} />

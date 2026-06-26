@@ -173,6 +173,10 @@ select.input {
   background: rgba(224, 71, 63, 0.08);
 }
 
+.fc .fc-daygrid-day.fc-day-neutral .fc-daygrid-day-frame {
+  background: rgba(166, 166, 188, 0.08);
+}
+
 .fc .fc-daygrid-day-number {
   width: 100%;
   padding: 0;

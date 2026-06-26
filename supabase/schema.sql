@@ -173,3 +173,28 @@ select
   '["Setup matches the written strategy", "Risk is within allowed limits", "High-impact news has been checked", "Stop loss is clearly defined before entry", "This is not a revenge or overtrade"]'::jsonb,
   '[0.25, 0.5, 1]'::jsonb
 where not exists (select 1 from strategies);
+
+-- ---------------------------------------------------------------------------
+-- strategy_images: persists the 14 strategy image slot URLs in Supabase so
+-- they survive browser clears and work across devices.
+-- slot_key matches the localStorage key format: tj_strat_{scenario}_{index}
+-- ---------------------------------------------------------------------------
+create table if not exists strategy_images (
+  slot_key text primary key,
+  url      text not null,
+  updated_at timestamptz not null default now()
+);
+
+alter table strategy_images enable row level security;
+
+do $$ begin
+  if not exists (
+    select 1 from pg_policies
+    where tablename = 'strategy_images' and policyname = 'public read strategy_images'
+  ) then
+    create policy "public read strategy_images"   on strategy_images for select using (true);
+    create policy "public write strategy_images"  on strategy_images for insert with check (true);
+    create policy "public update strategy_images" on strategy_images for update using (true);
+    create policy "public delete strategy_images" on strategy_images for delete using (true);
+  end if;
+end $$;

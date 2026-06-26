@@ -254,9 +254,11 @@ export async function createSymbol(name: string): Promise<TradeSymbol> {
   const sb = getSupabaseClient();
   const clean = name.trim().toUpperCase();
   if (sb) {
+    // Supabase has a UNIQUE constraint on symbols.name — upsert so a duplicate
+    // name returns the existing row rather than a 409 error.
     const { data, error } = await sb
       .from("symbols")
-      .insert({ name: clean, is_custom: true })
+      .upsert({ name: clean, is_custom: true }, { onConflict: "name" })
       .select()
       .single();
     if (error) throw error;
@@ -264,6 +266,9 @@ export async function createSymbol(name: string): Promise<TradeSymbol> {
   }
   ensureSeeded();
   const symbols = readLS<TradeSymbol[]>(LS_KEYS.symbols, []);
+  // Guard against duplicates in local mode (Supabase enforces this via UNIQUE)
+  const existing = symbols.find((s) => s.name === clean);
+  if (existing) return existing;
   const symbol: TradeSymbol = {
     id: uuid(), name: clean, is_custom: true, created_at: new Date().toISOString(),
   };
@@ -286,22 +291,6 @@ export async function listStrategies(): Promise<Strategy[]> {
   return readLS<Strategy[]>(LS_KEYS.strategies, []);
 }
 
-export async function updateStrategy(
-  id: string,
-  patch: Partial<Omit<Strategy, "id" | "created_at">>
-): Promise<Strategy> {
-  const sb = getSupabaseClient();
-  if (sb) {
-    const { data, error } = await sb.from("strategies").update(patch).eq("id", id).select().single();
-    if (error) throw error;
-    return data as Strategy;
-  }
-  ensureSeeded();
-  const strategies = readLS<Strategy[]>(LS_KEYS.strategies, []);
-  const updated = strategies.map((s) => (s.id === id ? { ...s, ...patch } : s));
-  writeLS(LS_KEYS.strategies, updated);
-  return updated.find((s) => s.id === id) as Strategy;
-}
 
 // ---------------------------------------------------------------------------
 // Trades
@@ -375,10 +364,96 @@ export async function uploadTradeImage(file: File): Promise<string> {
     const { data } = sb.storage.from("trade-screenshots").getPublicUrl(path);
     return data.publicUrl;
   }
+  // Warn if image is large — localStorage has a ~5MB total limit.
+  // Images over ~300KB as base64 risk filling it up after a few trades.
+  if (file.size > 400_000) {
+    console.warn(
+      `[TJ] Image "${file.name}" is ${Math.round(file.size / 1024)}KB. ` +
+      "Large images stored in localStorage may hit the 5MB limit. " +
+      "Consider connecting Supabase for unlimited cloud storage."
+    );
+  }
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
+    reader.onload = () => {
+      const result = reader.result as string;
+      try {
+        resolve(result);
+      } catch {
+        reject(new Error("Image too large for local storage. Please connect Supabase or use a smaller image."));
+      }
+    };
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
+}
+
+// ---------------------------------------------------------------------------
+// Strategy image upload (separate bucket path so they're never mixed with
+// trade screenshots, and so they survive a browser clear when Supabase is on)
+// ---------------------------------------------------------------------------
+
+export async function uploadStrategyImage(file: File): Promise<string> {
+  const sb = getSupabaseClient();
+  if (sb) {
+    const path = `strategy/${Date.now()}-${Math.random().toString(36).slice(2)}-${file.name}`;
+    const { error } = await sb.storage.from("trade-screenshots").upload(path, file);
+    if (error) throw error;
+    const { data } = sb.storage.from("trade-screenshots").getPublicUrl(path);
+    return data.publicUrl;
+  }
+  // Local mode — base64 data URL, with size guard
+  if (file.size > 800_000) {
+    throw new Error(
+      `Image is ${Math.round(file.size / 1024)}KB — too large for browser storage. ` +
+      "Compress it below 800KB, or connect Supabase for unlimited storage."
+    );
+  }
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(new Error("Failed to read image file."));
+    reader.readAsDataURL(file);
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Strategy image slot persistence
+// When Supabase is connected: slot_key → url is stored in strategy_images table
+// so images survive browser clears and work on any device.
+// When local: localStorage is the store (existing behaviour).
+// ---------------------------------------------------------------------------
+
+export async function getStrategyImageUrl(slotKey: string): Promise<string | null> {
+  const sb = getSupabaseClient();
+  if (sb) {
+    const { data } = await sb
+      .from("strategy_images")
+      .select("url")
+      .eq("slot_key", slotKey)
+      .maybeSingle();
+    return data?.url ?? null;
+  }
+  try { return localStorage.getItem(slotKey); } catch { return null; }
+}
+
+export async function saveStrategyImageUrl(slotKey: string, url: string): Promise<void> {
+  const sb = getSupabaseClient();
+  if (sb) {
+    await sb
+      .from("strategy_images")
+      .upsert({ slot_key: slotKey, url, updated_at: new Date().toISOString() },
+               { onConflict: "slot_key" });
+    return;
+  }
+  try { localStorage.setItem(slotKey, url); } catch { /* noop */ }
+}
+
+export async function deleteStrategyImageUrl(slotKey: string): Promise<void> {
+  const sb = getSupabaseClient();
+  if (sb) {
+    await sb.from("strategy_images").delete().eq("slot_key", slotKey);
+    return;
+  }
+  try { localStorage.removeItem(slotKey); } catch { /* noop */ }
 }

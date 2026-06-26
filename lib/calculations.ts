@@ -112,7 +112,7 @@ export function buildPerformanceCurve(
   return windowed.map((p) => {
     let value: number;
     if      (mode === "$") value = p.balance;
-    else if (mode === "%") value = startingBalance ? ((p.balance - startingBalance) / startingBalance) * 100 : 0;
+    else if (mode === "%") value = startingBalance > 0 ? ((p.balance - seq[0].balance) / seq[0].balance) * 100 : 0;
     else                   value = p.cumR - baseline.cumR;
     return { date: p.date, value };
   });

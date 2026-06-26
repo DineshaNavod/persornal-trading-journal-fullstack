@@ -75,14 +75,14 @@ export function TradeTable({
               <td
                 className={cn(
                   "py-3 pr-3 font-semibold tabular-nums",
-                  trade.pnl >= 0 ? "text-profit-dark" : "text-loss-dark"
+                  trade.pnl > 0 ? "text-profit-dark" : trade.pnl < 0 ? "text-loss-dark" : "text-neutral-500"
                 )}
               >
                 {formatCurrency(trade.pnl, { sign: true })}
               </td>
               <td className="py-3 pr-3">
-                <span className={trade.pnl >= 0 ? "pill-profit" : "pill-loss"}>
-                  {trade.pnl >= 0 ? "Win" : "Loss"}
+                <span className={trade.pnl > 0 ? "pill-profit" : trade.pnl < 0 ? "pill-loss" : "pill-neutral"}>
+                  {trade.pnl > 0 ? "Win" : trade.pnl < 0 ? "Loss" : "B/E"}
                 </span>
               </td>
               <td className="py-3 pr-3 text-neutral-400">{formatDateTime(trade.date)}</td>

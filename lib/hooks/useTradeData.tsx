@@ -14,13 +14,11 @@ interface TradeDataContextValue {
   activeStrategy: Strategy | null;
   trades: TradeWithRelations[];
   metrics: PortfolioMetrics;
-  currentBalance: number;
   refresh: () => Promise<void>;
   addSymbol: (name: string) => Promise<TradeSymbol>;
   addTrade: (input: Omit<Trade, "id" | "created_at">) => Promise<Trade>;
   removeTrade: (id: string) => Promise<void>;
   adjustCapital: (delta: number) => Promise<void>;
-  updateStrategy: (id: string, patch: Partial<Omit<Strategy, "id" | "created_at">>) => Promise<Strategy>;
 }
 
 const TradeDataContext = createContext<TradeDataContextValue | null>(null);
@@ -76,11 +74,6 @@ export function TradeDataProvider({ children }: { children: React.ReactNode }) {
     [trades, account]
   );
 
-  const currentBalance = useMemo(
-    () => (account ? account.starting_balance + trades.reduce((s, t) => s + t.pnl, 0) : 0),
-    [account, trades]
-  );
-
   const addSymbol = useCallback(async (name: string) => {
     const symbol = await store.createSymbol(name);
     setSymbols((prev) => [...prev, symbol]);
@@ -103,20 +96,13 @@ export function TradeDataProvider({ children }: { children: React.ReactNode }) {
     setAccount(updated);
   }, []);
 
-  const updateStrategy = useCallback(
-    async (id: string, patch: Partial<Omit<Strategy, "id" | "created_at">>) => {
-      const updated = await store.updateStrategy(id, patch);
-      setStrategies((prev) => prev.map((s) => (s.id === id ? updated : s)));
-      return updated;
-    }, []
-  );
 
   return (
     <TradeDataContext.Provider value={{
       loading, error, account, symbols, strategies,
       activeStrategy: strategies[0] ?? null,
-      trades, metrics, currentBalance,
-      refresh: load, addSymbol, addTrade, removeTrade, adjustCapital, updateStrategy,
+      trades, metrics,
+      refresh: load, addSymbol, addTrade, removeTrade, adjustCapital,
     }}>
       {children}
     </TradeDataContext.Provider>

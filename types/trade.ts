@@ -3,8 +3,6 @@
 
 export type Direction = "buy" | "sell";
 
-export type RiskPercent = 0.25 | 0.5 | 1;
-
 export interface Account {
   id: string;
   name: string;

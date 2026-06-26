@@ -1,12 +1,9 @@
-// Hardcoded credentials for this private, single-user journal.
-// Change these before you deploy anywhere other than your own machine.
-//
-// Note: because this is a client-side app, these values end up in the
-// JavaScript bundle that ships to the browser — anyone who really wants to
-// read the source could find them. This gate is meant to keep the app off
-// casual/accidental access (e.g. a shared link), not to withstand a
-// determined attacker. If you ever need real security, swap this for
-// Supabase Auth instead.
-
+// Private single-user credentials.
+// These are compiled into the client bundle — this gate prevents casual
+// access, not a determined attacker with source access. For true security
+// migrate to Supabase Auth.
 export const AUTH_USERNAME = "dinesha";
-export const AUTH_PASSWORD = "changeme123";
+export const AUTH_PASSWORD = "DineSHa@05256#";
+
+// Session expires after this many hours of inactivity.
+export const SESSION_HOURS = 8;

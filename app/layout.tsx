@@ -15,6 +15,10 @@ import { TopBar } from "@/components/layout/TopBar";
 export const metadata: Metadata = {
   title: "Trading Journal",
   description: "A discipline-first trading journal — every metric is computed from your trades.",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+  },
 };
 
 export const viewport: Viewport = {

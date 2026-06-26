@@ -35,18 +35,14 @@ export function CapitalAdjust() {
         className="btn-outline gap-1.5 text-xs"
       >
         <span className="flex items-center gap-0.5">
-          <Plus size={11} />
-          <Minus size={11} />
+          <Plus size={11} /><Minus size={11} />
         </span>
         Adjust capital
       </button>
 
       {open && (
         <>
-          {/* Backdrop */}
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-
-          {/* Popover */}
           <div className="absolute right-0 top-full z-50 mt-2 w-72 animate-scale-in rounded-2xl border border-neutral-150 bg-white p-4 shadow-soft dark:border-neutral-800 dark:bg-neutral-900">
             <div className="mb-3 flex items-center justify-between">
               <span className="text-[13px] font-semibold text-neutral-700 dark:text-neutral-200">
@@ -64,40 +60,26 @@ export function CapitalAdjust() {
               </span>
             </p>
 
-            {/* Add / Subtract toggle */}
             <div className="mb-3 flex rounded-xl border border-neutral-150 p-0.5 dark:border-neutral-800">
               {(["add", "sub"] as const).map((m) => (
-                <button
-                  key={m}
-                  type="button"
-                  onClick={() => setMode(m)}
+                <button key={m} type="button" onClick={() => setMode(m)}
                   className={cn(
                     "flex flex-1 items-center justify-center gap-1.5 rounded-lg py-2 text-xs font-semibold transition-all",
                     mode === m
-                      ? m === "add"
-                        ? "bg-profit text-white"
-                        : "bg-loss text-white"
-                      : "text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300",
-                  )}
-                >
-                  {m === "add" ? (
-                    <>
-                      <Plus size={13} /> Add funds
-                    </>
-                  ) : (
-                    <>
-                      <Minus size={13} /> Withdraw
-                    </>
-                  )}
+                      ? m === "add" ? "bg-profit text-white" : "bg-loss text-white"
+                      : "text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
+                  )}>
+                  {m === "add" ? <><Plus size={13} /> Add funds</> : <><Minus size={13} /> Withdraw</>}
                 </button>
               ))}
             </div>
 
+            {/* FIX: flex row so $ never overlaps placeholder */}
             <div className="flex gap-2">
-              <div className="relative flex-1">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-neutral-400"></span>
+              <div className="flex flex-1 overflow-hidden rounded-xl border border-neutral-200 bg-white focus-within:border-accent focus-within:ring-4 focus-within:ring-accent/10 dark:border-neutral-700 dark:bg-neutral-900">
+                <span className="flex items-center pl-3 pr-1 text-sm font-semibold text-neutral-400 select-none">$</span>
                 <input
-                  className="input pl-6"
+                  className="min-w-0 flex-1 border-0 bg-transparent py-2.5 pr-3 text-sm text-neutral-900 placeholder:text-neutral-300 outline-none dark:text-neutral-100"
                   type="number"
                   min="0"
                   step="100"
@@ -116,7 +98,7 @@ export function CapitalAdjust() {
                   "btn flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-colors",
                   mode === "add"
                     ? "bg-profit text-white hover:bg-profit-dark disabled:opacity-40"
-                    : "bg-loss text-white hover:bg-loss-dark disabled:opacity-40",
+                    : "bg-loss text-white hover:bg-loss-dark disabled:opacity-40"
                 )}
               >
                 <Check size={16} />
@@ -124,17 +106,14 @@ export function CapitalAdjust() {
             </div>
 
             {input && Number(input) > 0 && (
-              <p
-                className={cn(
-                  "mt-2 text-center text-[11px] font-medium",
-                  mode === "add" ? "text-profit-dark" : "text-loss-dark",
-                )}
-              >
+              <p className={cn("mt-2 text-center text-[11px] font-medium",
+                mode === "add" ? "text-profit-dark" : "text-loss-dark"
+              )}>
                 New balance:{" "}
                 {formatCurrency(
                   mode === "add"
                     ? account.starting_balance + Number(input)
-                    : Math.max(0, account.starting_balance - Number(input)),
+                    : Math.max(0, account.starting_balance - Number(input))
                 )}
               </p>
             )}
