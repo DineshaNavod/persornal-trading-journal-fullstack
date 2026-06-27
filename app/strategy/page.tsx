@@ -326,9 +326,9 @@ export default function StrategyPage() {
           </Section>
 
           {/* Exit Criteria */}
-          <Section title="Exit Criteria" icon="🎯">
+          <Section title="Secret of Trading Success" icon="🎯">
             <p className="text-sm text-neutral-700 dark:text-neutral-200">
-              Pick <strong>ONE</strong> target (opposing zone/structure).
+              No capital = no trade.<strong>Protect survival first,</strong> profits come second.
             </p>
           </Section>
 
