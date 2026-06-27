@@ -251,7 +251,7 @@ export default function StrategyPage() {
             <ol className="space-y-3">
               {[
                 "Mark HTF range + premium/discount.",
-                "Mark liquidity (PDH/PDL + equal highs/lows)",
+                "Mark liquidity (PDH/PDL + equal highs/lows + Session H/L)",
                 "Decide continuation vs pullback vs reversal",
                 "Pick ONE target (opposing zone/structure).",
                 `Define invalidation: "My bias is wrong if price breaks + holds beyond X,"`,
