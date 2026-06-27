@@ -162,16 +162,9 @@ function ImageSlot({ storageKey, label }: { storageKey: string; label: string })
           ) : url ? (
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={url} alt={label} className="h-full w-full object-cover transition-opacity group-hover:opacity-75"/>
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <img src={url} alt={label} className="h-full w-full object-cover"/>
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/10">
                 <ZoomIn size={20} className="text-white drop-shadow"/>
-              </div>
-              <button type="button" onClick={(e) => { e.stopPropagation(); void clear(); }}
-                className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80">
-                <X size={11}/>
-              </button>
-              <div className="absolute left-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-profit text-white">
-                <Check size={11}/>
               </div>
             </>
           ) : (
