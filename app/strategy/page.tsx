@@ -328,7 +328,7 @@ export default function StrategyPage() {
           {/* Exit Criteria */}
           <Section title="Secret of Trading Success" icon="🎯">
             <p className="text-sm text-neutral-700 dark:text-neutral-200">
-              No capital = no trade.<strong>Protect survival first,</strong> profits come second.
+              No capital = no trade.<strong> Protect survival first,</strong> profits come second.
             </p>
           </Section>
 
