@@ -250,7 +250,7 @@ export default function StrategyPage() {
           <Section title="Charting Process" icon="📈">
             <ol className="space-y-3">
               {[
-                "Mark HTF range + premium/discount.",
+                "Mark HTF range + premium/discount + POI.",
                 "Mark liquidity (PDH/PDL + equal highs/lows + Session H/L)",
                 "Decide continuation vs pullback vs reversal",
                 "Pick ONE target (opposing zone/structure).",
