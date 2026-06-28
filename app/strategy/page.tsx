@@ -314,6 +314,7 @@ export default function StrategyPage() {
             <ul className="space-y-3">
               {[
                 "Predefine risk before entry (fixed R, no resizing mid-trade)",
+                "Place your stop loss beyond the protected high or low. If no protected swing exists, use the nearest previous protected swing or a few pips beyond the supply/demand zone.",
                 "Set and Forget",
                 `If invalidation hits, you're done: exit and reassess, no "one more trade to make it back"`,
               ].map((rule, i) => (
