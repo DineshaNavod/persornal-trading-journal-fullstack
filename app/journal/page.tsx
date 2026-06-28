@@ -121,10 +121,24 @@ function PerformancePopup({
   const pf = m.profitFactor === Infinity ? "Perfect" : m.profitFactor === 0 ? "—" : m.profitFactor.toFixed(2);
 
   return (
-    <div
-      ref={popupRef}
-      className="absolute right-0 top-full z-50 mt-2 w-[340px] animate-scale-in rounded-2xl border border-neutral-150 bg-white shadow-soft dark:border-neutral-800 dark:bg-neutral-900 sm:w-[380px]"
+    <>
+      {/* Mobile backdrop */}
+      <div className="fixed inset-0 z-40 bg-black/30 sm:hidden" onMouseDown={onClose} />
+      <div
+        ref={popupRef}
+      className={cn(
+        "z-50 animate-scale-in rounded-2xl border border-neutral-150 bg-white shadow-soft dark:border-neutral-800 dark:bg-neutral-900",
+        // Mobile: fixed bottom sheet spanning full width
+        "fixed inset-x-0 bottom-0 rounded-b-none",
+        // Desktop: absolute dropdown anchored to button
+        "sm:absolute sm:inset-x-auto sm:bottom-auto sm:right-0 sm:top-full sm:mt-2 sm:w-[380px] sm:rounded-2xl"
+      )}
     >
+      {/* Mobile drag handle */}
+      <div className="flex justify-center pt-2.5 pb-0.5 sm:hidden">
+        <div className="h-1 w-10 rounded-full bg-neutral-200 dark:bg-neutral-700" />
+      </div>
+
       {/* Header */}
       <div className="flex items-center justify-between border-b border-neutral-100 px-4 py-3 dark:border-neutral-800">
         <div className="flex items-center gap-2">
@@ -235,12 +249,13 @@ function PerformancePopup({
             </div>
           )}
 
-          <p className="text-center text-[10px] text-neutral-300 dark:text-neutral-600">
+          <p className="pb-[env(safe-area-inset-bottom)] text-center text-[10px] text-neutral-300 dark:text-neutral-600">
             {filtered.length} trade{filtered.length === 1 ? "" : "s"} · {PERIOD_LABELS[period]}
           </p>
         </div>
       )}
     </div>
+    </>
   );
 }
 

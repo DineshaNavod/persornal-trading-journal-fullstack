@@ -73,23 +73,27 @@ export function TradeReviewModal({
           </div>
           {onDelete && (
             confirming ? (
-              <div className="flex items-center gap-2 rounded-xl border border-loss/30 bg-loss-soft px-3 py-1.5 dark:bg-loss/10">
-                <AlertTriangle size={14} className="shrink-0 text-loss-dark" />
-                <span className="text-xs font-medium text-loss-dark">Delete this trade?</span>
-                <button
-                  type="button"
-                  onClick={() => onDelete(trade.id)}
-                  className="flex items-center gap-1 rounded-lg bg-loss px-2 py-1 text-xs font-semibold text-white hover:bg-loss-dark"
-                >
-                  <Check size={12} /> Yes, delete
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setConfirming(false)}
-                  className="rounded-lg px-2 py-1 text-xs font-medium text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800"
-                >
-                  Cancel
-                </button>
+              <div className="flex flex-col gap-1.5 rounded-xl border border-loss/30 bg-loss-soft p-2.5 dark:bg-loss/10 sm:flex-row sm:items-center sm:gap-2 sm:py-1.5">
+                <div className="flex items-center gap-1.5">
+                  <AlertTriangle size={14} className="shrink-0 text-loss-dark" />
+                  <span className="text-xs font-medium text-loss-dark">Delete this trade?</span>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => onDelete(trade.id)}
+                    className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-loss px-3 py-1.5 text-xs font-semibold text-white hover:bg-loss-dark sm:flex-none sm:px-2 sm:py-1"
+                  >
+                    <Check size={12} /> Yes, delete
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfirming(false)}
+                    className="flex-1 rounded-lg px-3 py-1.5 text-xs font-medium text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 sm:flex-none sm:px-2 sm:py-1"
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             ) : (
               <button
