@@ -1,11 +1,11 @@
 export const DEFAULT_SYMBOLS = ["EURUSD", "GBPUSD", "AUDUSD", "GBPJPY"] as const;
 
 export const CHECKLIST_ITEMS: { key: ChecklistKey; label: string }[] = [
-  { key: "setup_valid", label: "Setup is valid against my strategy" },
-  { key: "risk_within_limits", label: "Risk is within allowed limits" },
-  { key: "news_checked", label: "I have checked upcoming news" },
-  { key: "stop_loss_defined", label: "Stop loss is clearly defined" },
-  { key: "no_overtrading", label: "This is not overtrading" },
+  { key: "setup_valid",        label: "Bias Alignment" },
+  { key: "risk_within_limits", label: "High Probability POI" },
+  { key: "news_checked",       label: "LQ Sweep + Market Shift" },
+  { key: "stop_loss_defined",  label: "During Killzone" },
+  { key: "no_overtrading",     label: "Asymmetric Risk to Reward" },
 ];
 
 export type ChecklistKey =
