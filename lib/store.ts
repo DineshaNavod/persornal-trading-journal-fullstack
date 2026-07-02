@@ -96,7 +96,6 @@ function ensureSeeded() {
     risk_within_limits: true,
     news_checked: true,
     stop_loss_defined: true,
-    no_overtrading: true,
   };
 
   const bySymbol = (name: string) => symbols.find((s) => s.name === name)!.id;
@@ -105,6 +104,7 @@ function ensureSeeded() {
     {
       id: uuid(), account_id: MAIN_ACCOUNT_ID, symbol_id: bySymbol("EURUSD"),
       strategy_id: strategy.id, date: daysAgoIso(12, 9, 42), direction: "buy",
+      trade_date: null, entry_time: null, market_condition: null, is_fomo: null, lq_sweep: null,
       entry_price: 1.079, stop_loss_price: 1.077, take_profit_price: 1.084,
       risk_dollar: 60, profit: 133,
       notes: "Clean liquidity sweep of Asia low into London open.",
@@ -114,16 +114,18 @@ function ensureSeeded() {
     {
       id: uuid(), account_id: MAIN_ACCOUNT_ID, symbol_id: bySymbol("GBPJPY"),
       strategy_id: strategy.id, date: daysAgoIso(10, 11, 5), direction: "sell",
+      trade_date: null, entry_time: null, market_condition: null, is_fomo: null, lq_sweep: null,
       entry_price: 196.4, stop_loss_price: 195.85, take_profit_price: 194.2,
       risk_dollar: 30, profit: -30,
       notes: "Faded into resistance too early.",
-      checklist: { ...checklist, no_overtrading: false },
+      checklist: { ...checklist },
       htf_image_url: PLACEHOLDER_CHART, mtf_image_url: PLACEHOLDER_CHART,
       ltf_image_url: PLACEHOLDER_CHART, created_at: daysAgoIso(10, 11, 5),
     },
     {
       id: uuid(), account_id: MAIN_ACCOUNT_ID, symbol_id: bySymbol("AUDUSD"),
       strategy_id: strategy.id, date: daysAgoIso(8, 8, 50), direction: "buy",
+      trade_date: null, entry_time: null, market_condition: null, is_fomo: null, lq_sweep: null,
       entry_price: 0.652, stop_loss_price: 0.6495, take_profit_price: 0.6585,
       risk_dollar: 30, profit: 52,
       notes: "Textbook continuation off the daily order block.",
@@ -133,6 +135,7 @@ function ensureSeeded() {
     {
       id: uuid(), account_id: MAIN_ACCOUNT_ID, symbol_id: bySymbol("GBPUSD"),
       strategy_id: strategy.id, date: daysAgoIso(6, 13, 15), direction: "sell",
+      trade_date: null, entry_time: null, market_condition: null, is_fomo: null, lq_sweep: null,
       entry_price: 1.268, stop_loss_price: 1.272, take_profit_price: 1.261,
       risk_dollar: 15, profit: -15,
       notes: "Chopped around news, stopped out for a small loss.",
@@ -143,6 +146,7 @@ function ensureSeeded() {
     {
       id: uuid(), account_id: MAIN_ACCOUNT_ID, symbol_id: bySymbol("EURUSD"),
       strategy_id: strategy.id, date: daysAgoIso(4, 10, 0), direction: "buy",
+      trade_date: null, entry_time: null, market_condition: null, is_fomo: null, lq_sweep: null,
       entry_price: 1.082, stop_loss_price: 1.0795, take_profit_price: 1.089,
       risk_dollar: 60, profit: 120,
       notes: "Full TP hit, followed the plan precisely.",
@@ -152,6 +156,7 @@ function ensureSeeded() {
     {
       id: uuid(), account_id: MAIN_ACCOUNT_ID, symbol_id: bySymbol("GBPJPY"),
       strategy_id: strategy.id, date: daysAgoIso(2, 9, 20), direction: "buy",
+      trade_date: null, entry_time: null, market_condition: null, is_fomo: null, lq_sweep: null,
       entry_price: 195.2, stop_loss_price: 194.4, take_profit_price: 196.6,
       risk_dollar: 30, profit: 71,
       notes: "Good reaction off the 4H demand zone.",
@@ -161,6 +166,7 @@ function ensureSeeded() {
     {
       id: uuid(), account_id: MAIN_ACCOUNT_ID, symbol_id: bySymbol("AUDUSD"),
       strategy_id: strategy.id, date: daysAgoIso(1, 14, 0), direction: "sell",
+      trade_date: null, entry_time: null, market_condition: null, is_fomo: null, lq_sweep: null,
       entry_price: 0.6605, stop_loss_price: 0.663, take_profit_price: 0.654,
       risk_dollar: 15, profit: -15,
       notes: "Entered against the HTF bias.",
@@ -304,19 +310,22 @@ export async function listTrades(): Promise<Trade[]> {
     return data as Trade[];
   }
   ensureSeeded();
-  // Migration: trades saved by earlier versions of this app may have
-  // exit_price and risk_percent instead of risk_dollar and profit.
-  // Convert them transparently so the UI never crashes on old data.
+  // Migration: fill in any missing fields from older app versions
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const raw = readLS<any[]>(LS_KEYS.trades, []);
   const migrated: Trade[] = raw.map((t) => {
-    if ("profit" in t && "risk_dollar" in t) return t as Trade; // already new format
-    // Old format → supply safe defaults so every field the UI needs exists
     return {
-      ...t,
+      // v1→v2: exit_price/risk_percent → risk_dollar/profit
       stop_loss_price: t.stop_loss_price ?? t.exit_price ?? 0,
       risk_dollar: t.risk_dollar ?? 0,
       profit: t.profit ?? 0,
+      // v2→v3: new analytical fields (null = not yet tagged)
+      trade_date: t.trade_date ?? null,
+      entry_time: t.entry_time ?? null,
+      market_condition: t.market_condition ?? null,
+      is_fomo: t.is_fomo ?? null,
+      lq_sweep: t.lq_sweep ?? null,
+      ...t,
     } as Trade;
   });
   // Persist migrated data so the conversion only runs once

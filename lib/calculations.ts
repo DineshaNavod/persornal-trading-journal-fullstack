@@ -1,4 +1,4 @@
-import type { Account, Trade, TradeWithRelations } from "@/types/trade";
+import type { Account, KillZone, Trade, TradeWithRelations } from "@/types/trade";
 
 /**
  * Hydrates a raw trade.
@@ -30,7 +30,7 @@ export function buildHydratedTrades(
     if (account) {
       balances.set(trade.account_id, (balances.get(trade.account_id) ?? 0) + derived.pnl);
     }
-    return { ...trade, account, symbol: null, strategy: null, ...derived };
+    return { ...trade, account, symbol: null, strategy: null, ...derived, kill_zone: detectKillZone(trade.entry_time) };
   });
 
   return { hydrated, balances };
@@ -123,4 +123,41 @@ export function dayOutcomeFor(trades: TradeWithRelations[]): DayOutcome {
   if (!trades.length) return "none";
   const total = trades.reduce((s, t) => s + t.pnl, 0);
   return total > 0 ? "profit" : total < 0 ? "loss" : "none";
+}
+
+// ── Killzone detection ────────────────────────────────────────────────────────
+// All times are in UTC-4 as entered by the user. No conversion needed.
+// Asian  : 17:00 – 00:00  (00:00 inclusive = midnight cutoff)
+// London : 02:00 – 05:00
+// NY     : 07:00 – 10:00
+// Outside: everything else
+
+export function detectKillZone(entryTime: string | null): KillZone {
+  if (!entryTime) return "untagged"; // unknown ≠ confirmed outside — don't pollute Outside KZ stats
+  const parts = entryTime.split(":");
+  const h = parseInt(parts[0], 10);
+  const m = parseInt(parts[1] ?? "0", 10);
+  const mins = h * 60 + m;
+
+  // Asian: 17:00 (1020) to 00:00 (0) inclusive — 00:01 onward is outside
+  if (mins >= 1020 || mins === 0) return "asian";
+  // London: 02:00 (120) to 05:00 (300) inclusive — 05:01 onward is outside
+  if (mins >= 120 && mins <= 300) return "london";
+  // NY: 07:00 (420) to 10:00 (600) inclusive — 10:01 onward is outside
+  if (mins >= 420 && mins <= 600) return "newyork";
+  return "outside";
+}
+
+// ── Forex day of week ─────────────────────────────────────────────────────────
+// Forex day runs 17:00 UTC-4 to 16:59 UTC-4 next calendar day.
+// So 18:00 on Monday belongs to Tuesday's forex day.
+// Returns "Monday" | "Tuesday" | … | "Friday" (skips weekend edges).
+
+export function getForexDay(tradeDate: string | null, entryTime: string | null): string {
+  if (!tradeDate) return "Unknown";
+  const h = entryTime ? parseInt(entryTime.split(":")[0], 10) : 0;
+  const d = new Date(tradeDate + "T12:00:00"); // noon prevents UTC-shift edge
+  if (h >= 17) d.setDate(d.getDate() + 1);    // after 17:00 → next calendar day
+  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  return days[d.getDay()] ?? "Unknown";
 }

@@ -1,7 +1,17 @@
 // Core domain types for the trading journal.
-// These mirror the Supabase schema in supabase/schema.sql.
 
 export type Direction = "buy" | "sell";
+
+export type MarketCondition =
+  | "buy_premium"
+  | "buy_discount"
+  | "sell_premium"
+  | "sell_discount";
+
+// "untagged" = no entry_time recorded (old trade or skipped field) — distinct
+// from "outside", which means we DO know the time and it's confirmed outside
+// all three killzones. Keeps Killzone analytics honest, same as every other panel.
+export type KillZone = "london" | "newyork" | "asian" | "outside" | "untagged";
 
 export interface Account {
   id: string;
@@ -34,7 +44,6 @@ export interface TradeChecklist {
   risk_within_limits: boolean;
   news_checked: boolean;
   stop_loss_defined: boolean;
-  no_overtrading: boolean;
 }
 
 export const EMPTY_CHECKLIST: TradeChecklist = {
@@ -42,7 +51,6 @@ export const EMPTY_CHECKLIST: TradeChecklist = {
   risk_within_limits: false,
   news_checked: false,
   stop_loss_defined: false,
-  no_overtrading: false,
 };
 
 export interface Trade {
@@ -50,14 +58,19 @@ export interface Trade {
   account_id: string;
   symbol_id: string;
   strategy_id: string | null;
-  date: string;
+  date: string; // journal submission timestamp
+  // ── New analytical fields (nullable for backward compat) ──
+  trade_date: string | null;          // actual trade date YYYY-MM-DD (UTC-4)
+  entry_time: string | null;          // actual entry time HH:MM (UTC-4)
+  market_condition: MarketCondition | null;
+  is_fomo: boolean | null;
+  lq_sweep: boolean | null;           // true = sweep, false = no sweep
+  // ─────────────────────────────────────────────────────────
   direction: Direction;
   entry_price: number;
   stop_loss_price: number;
   take_profit_price: number;
-  /** Manually entered: how many dollars the trader risked on this trade. */
   risk_dollar: number;
-  /** Manually entered: net profit or loss in dollars (negative = loss). */
   profit: number;
   notes: string | null;
   checklist: TradeChecklist;
@@ -71,8 +84,8 @@ export interface TradeWithRelations extends Trade {
   account: Account | null;
   symbol: Symbol | null;
   strategy: Strategy | null;
-  // Derived at read time — never stored.
-  r_multiple: number;  // profit / risk_dollar
-  pnl: number;         // same as profit (alias kept for chart/metrics compatibility)
+  r_multiple: number;
+  pnl: number;
   is_win: boolean;
+  kill_zone: KillZone;       // derived from entry_time
 }

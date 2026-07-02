@@ -9,6 +9,7 @@ const PAGE_META: Record<string, { title: string; subtitle: string }> = {
   "/":         { title: "Dashboard",  subtitle: "Your trading performance at a glance, calculated straight from your journal." },
   "/journal":  { title: "Journal",    subtitle: "Log every trade. Every number downstream is computed from what you enter here." },
   "/calendar": { title: "Calendar",   subtitle: "Green days made money, red days lost it — click any date to review." },
+  "/analytics":{ title: "Analytics",  subtitle: "Session, day, pair, and condition breakdowns — all from your real trade data." },
   "/strategy": { title: "Strategy",   subtitle: "Your locked trading plan. Edit it from the admin view only." },
 };
 

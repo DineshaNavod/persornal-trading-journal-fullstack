@@ -198,3 +198,28 @@ do $$ begin
     create policy "public delete strategy_images" on strategy_images for delete using (true);
   end if;
 end $$;
+
+-- ── v3 Migration: new analytical fields on trades ────────────────────────────
+do $$
+begin
+  if not exists (select 1 from information_schema.columns where table_name='trades' and column_name='trade_date') then
+    alter table trades add column trade_date date;
+  end if;
+  if not exists (select 1 from information_schema.columns where table_name='trades' and column_name='entry_time') then
+    alter table trades add column entry_time text;
+  end if;
+  if not exists (select 1 from information_schema.columns where table_name='trades' and column_name='market_condition') then
+    alter table trades add column market_condition text check (market_condition in ('buy_premium','buy_discount','sell_premium','sell_discount'));
+  end if;
+  if not exists (select 1 from information_schema.columns where table_name='trades' and column_name='is_fomo') then
+    alter table trades add column is_fomo boolean;
+  end if;
+  if not exists (select 1 from information_schema.columns where table_name='trades' and column_name='lq_sweep') then
+    alter table trades add column lq_sweep boolean;
+  end if;
+end $$;
+
+-- Add "Other" symbol if not present
+insert into symbols (name, is_custom)
+values ('Other', false)
+on conflict (name) do nothing;

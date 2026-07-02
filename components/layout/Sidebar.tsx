@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, NotebookPen, CalendarDays, ShieldCheck } from "lucide-react";
+import { LayoutDashboard, NotebookPen, CalendarDays, ShieldCheck, BarChart3 } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { cn } from "@/lib/utils";
 
@@ -10,6 +10,7 @@ const NAV_ITEMS = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
   { href: "/journal", label: "Journal", icon: NotebookPen },
   { href: "/calendar", label: "Calendar", icon: CalendarDays },
+  { href: "/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/strategy", label: "Strategy", icon: ShieldCheck },
 ];
 
@@ -72,11 +73,11 @@ export function Sidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[10px] font-medium text-neutral-400 transition-colors duration-150",
+                "flex flex-1 flex-col items-center gap-0.5 py-2 text-[9px] font-medium text-neutral-400 transition-colors duration-150 sm:text-[10px] sm:py-2.5",
                 active && "text-accent"
               )}
             >
-              <Icon size={19} strokeWidth={active ? 2.4 : 2} />
+              <Icon size={18} strokeWidth={active ? 2.4 : 2} className="sm:h-[19px] sm:w-[19px]" />
               {item.label}
             </Link>
           );
