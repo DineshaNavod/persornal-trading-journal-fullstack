@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
-import { cn, formatCurrency, formatDateTime } from "@/lib/utils";
+import { cn, formatCurrency, formatDate } from "@/lib/utils";
 import { SymbolIcon } from "@/components/journal/SymbolIcon";
 import type { TradeWithRelations } from "@/types/trade";
 
@@ -85,7 +85,11 @@ export function TradeTable({
                   {trade.pnl > 0 ? "Win" : trade.pnl < 0 ? "Loss" : "B/E"}
                 </span>
               </td>
-              <td className="py-3 pr-3 text-neutral-400">{formatDateTime(trade.date)}</td>
+              <td className="py-3 pr-3 text-neutral-400">
+                {trade.trade_date
+                  ? `${formatDate(trade.trade_date, { month: "short", day: "numeric", year: undefined })}${trade.entry_time ? ` · ${trade.entry_time}` : ""}`
+                  : "—"}
+              </td>
             </tr>
           ))}
         </tbody>

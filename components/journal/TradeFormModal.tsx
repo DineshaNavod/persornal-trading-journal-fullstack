@@ -55,8 +55,8 @@ export function TradeFormModal({ onClose }: { onClose: () => void }) {
   const entryNum  = Number(entry);
   const slNum     = Number(stopLoss);
   const tpNum     = Number(takeProfit);
-  const riskNum   = Number(riskDollar);
-  const profitNum = Number(profitDollar);
+  const riskNum   = Math.round(Number(riskDollar)   * 100) / 100;
+  const profitNum = Math.round(Number(profitDollar) * 100) / 100;
 
   const canSubmit =
     symbolId &&
