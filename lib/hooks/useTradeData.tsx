@@ -87,8 +87,10 @@ export function TradeDataProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const removeTrade = useCallback(async (id: string) => {
-    await store.deleteTrade(id);
+    // Optimistic: remove from UI instantly so there's no freeze waiting for network
     setRawTrades((prev) => prev.filter((t) => t.id !== id));
+    // Delete from Supabase (and its Storage images) in the background
+    await store.deleteTrade(id);
   }, []);
 
   const adjustCapital = useCallback(async (delta: number) => {

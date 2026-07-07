@@ -352,10 +352,33 @@ export async function createTrade(input: Omit<Trade, "id" | "created_at">): Prom
 export async function deleteTrade(id: string): Promise<void> {
   const sb = getSupabaseClient();
   if (sb) {
+    // Fetch image URLs before deleting the row so we can clean up Storage too
+    const { data: trade } = await sb
+      .from("trades")
+      .select("htf_image_url, mtf_image_url, ltf_image_url")
+      .eq("id", id)
+      .single();
+
+    if (trade) {
+      // Extract storage object paths from the public URLs
+      // URL format: https://xxx.supabase.co/storage/v1/object/public/trade-screenshots/{path}
+      const paths = [trade.htf_image_url, trade.mtf_image_url, trade.ltf_image_url]
+        .filter((url: string) => url && url.includes("/trade-screenshots/"))
+        .map((url: string) => url.split("/trade-screenshots/")[1])
+        .filter(Boolean);
+
+      if (paths.length > 0) {
+        // Best-effort — don't block or throw if storage delete fails
+        await sb.storage.from("trade-screenshots").remove(paths).catch(() => {});
+      }
+    }
+
     const { error } = await sb.from("trades").delete().eq("id", id);
     if (error) throw error;
     return;
   }
+  // Local mode: images are base64 data-URLs embedded in the trade record itself
+  // — they don't exist as separate storage objects, so no extra cleanup needed
   const trades = readLS<Trade[]>(LS_KEYS.trades, []);
   writeLS(LS_KEYS.trades, trades.filter((t) => t.id !== id));
 }
