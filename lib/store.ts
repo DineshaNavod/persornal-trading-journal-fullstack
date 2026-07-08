@@ -352,7 +352,7 @@ export async function createTrade(input: Omit<Trade, "id" | "created_at">): Prom
 export async function deleteTrade(id: string): Promise<void> {
   const sb = getSupabaseClient();
   if (sb) {
-    // Fetch image URLs before deleting the row so we can clean up Storage too
+    // Fetch image URLs BEFORE deleting the row
     const { data: trade } = await sb
       .from("trades")
       .select("htf_image_url, mtf_image_url, ltf_image_url")
@@ -360,16 +360,29 @@ export async function deleteTrade(id: string): Promise<void> {
       .single();
 
     if (trade) {
-      // Extract storage object paths from the public URLs
-      // URL format: https://xxx.supabase.co/storage/v1/object/public/trade-screenshots/{path}
+      // Supabase public URL format:
+      // https://<ref>.supabase.co/storage/v1/object/public/<bucket>/<path>
+      // We need just <path> (everything after the bucket name)
+      const BUCKET = "trade-screenshots";
+      const marker = `/object/public/${BUCKET}/`;
+
       const paths = [trade.htf_image_url, trade.mtf_image_url, trade.ltf_image_url]
-        .filter((url: string) => url && url.includes("/trade-screenshots/"))
-        .map((url: string) => url.split("/trade-screenshots/")[1])
+        .filter((url: string | null) => url && url.includes(marker))
+        .map((url: string) => {
+          // Decode URI components in case of encoded filenames
+          const raw = url.split(marker)[1];
+          try { return decodeURIComponent(raw); } catch { return raw; }
+        })
         .filter(Boolean);
 
       if (paths.length > 0) {
-        // Best-effort — don't block or throw if storage delete fails
-        await sb.storage.from("trade-screenshots").remove(paths).catch(() => {});
+        const { error: storageError } = await sb.storage
+          .from(BUCKET)
+          .remove(paths);
+        // Log but don't throw — we still want to delete the DB row
+        if (storageError) {
+          console.error("[TJ] Storage image delete failed:", storageError.message, "paths:", paths);
+        }
       }
     }
 
@@ -377,8 +390,8 @@ export async function deleteTrade(id: string): Promise<void> {
     if (error) throw error;
     return;
   }
-  // Local mode: images are base64 data-URLs embedded in the trade record itself
-  // — they don't exist as separate storage objects, so no extra cleanup needed
+  // Local mode: images are base64 data-URLs inside the trade record —
+  // no separate storage objects exist, nothing extra to clean up
   const trades = readLS<Trade[]>(LS_KEYS.trades, []);
   writeLS(LS_KEYS.trades, trades.filter((t) => t.id !== id));
 }
