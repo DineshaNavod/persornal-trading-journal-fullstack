@@ -17,7 +17,9 @@ export default function CalendarPage() {
   const tradesByDate = useMemo(() => {
     const map = new Map<string, TradeWithRelations[]>();
     for (const trade of trades) {
-      const key = localDateKey(trade.date);
+      // Use trade_date (the exact calendar date the user entered in UTC-4)
+      // NOT trade.date which is a UTC timestamp that shifts to wrong day in SL timezone
+      const key = trade.trade_date ?? localDateKey(trade.date);
       const list = map.get(key) ?? [];
       list.push(trade);
       map.set(key, list);
