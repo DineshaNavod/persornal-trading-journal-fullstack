@@ -233,6 +233,7 @@ export default function StrategyPage() {
               {[
                 "Check Economic calendar",
                 "Review Your trading Plan",
+                "Analyze DXY for better Planning",
                 "Analyze the chart",
                 "Meditation / Relax",
               ].map((item, i) => (
