@@ -281,7 +281,7 @@ export function TradeFormModal({ onClose }: { onClose: () => void }) {
                 <span className="flex items-center pl-3 pr-1 text-sm font-bold text-loss select-none">$</span>
                 <input
                   className="min-w-0 flex-1 border-0 bg-transparent py-2.5 pr-3 text-sm text-neutral-900 placeholder:text-neutral-300 outline-none dark:text-neutral-100"
-                  type="number" min="0" step="0.01" inputMode="decimal"
+                  type="number" min="0" step="any" inputMode="decimal"
                   value={riskDollar}
                   onChange={(e) => setRiskDollar(e.target.value)}
                   placeholder="0.00"
@@ -313,7 +313,7 @@ export function TradeFormModal({ onClose }: { onClose: () => void }) {
                 )}>$</span>
                 <input
                   className="min-w-0 flex-1 border-0 bg-transparent py-2.5 pr-3 text-sm text-neutral-900 placeholder:text-neutral-300 outline-none dark:text-neutral-100"
-                  type="number" step="0.01" inputMode="decimal"
+                  type="number" step="any" inputMode="decimal"
                   value={profitDollar}
                   onChange={(e) => setProfitDollar(e.target.value)}
                   placeholder="0.00"
