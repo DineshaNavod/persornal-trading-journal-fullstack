@@ -251,11 +251,12 @@ export default function StrategyPage() {
           <Section title="Charting Process" icon="📈">
             <ol className="space-y-3">
               {[
-                "Mark HTF range + premium/discount + POI.",
-                "Mark liquidity (PDH/PDL + equal highs/lows + Session H/L)",
-                "Decide continuation vs pullback vs reversal",
-                "Pick ONE target (opposing zone/structure).",
-                `Define invalidation: "My bias is wrong if price breaks + holds beyond X,"`,
+                "Mark 1W/1D FVG + PWH/L + PDH/L.",
+                "Mark HTF range(4H) + premium/discount + POI.",
+                "Mark liquidity (equal H/L + Session H/L + TLL).",
+                "SWITCH MTF(1H/15M) + Mark range + premium/discount + POI.",
+                "WAIT COME TO THAT ZONES + SHIFT LTF(5M) + WAIT MSS.",
+                "PICK ONE TARGET + DEFINE INVALIDATION + HOLD.",
               ].map((step, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <span className={cn(
