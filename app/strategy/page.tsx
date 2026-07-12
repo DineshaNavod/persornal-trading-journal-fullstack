@@ -254,6 +254,7 @@ export default function StrategyPage() {
                 "Mark 1W/1D FVG + PWH/L + PDH/L.",
                 "Mark HTF range(4H) + premium/discount + POI.",
                 "Mark liquidity (equal H/L + Session H/L + TLL).",
+                "Decide continuation vs pullback vs reversal.",
                 "SWITCH MTF(1H/15M) + Mark range + premium/discount + POI.",
                 "WAIT COME TO THAT ZONES + SHIFT LTF(5M) + WAIT MSS.",
                 "PICK ONE TARGET + DEFINE INVALIDATION + HOLD.",
