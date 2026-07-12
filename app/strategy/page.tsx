@@ -316,10 +316,10 @@ export default function StrategyPage() {
           <Section title="Trade Management Rules" icon="📝">
             <ul className="space-y-3">
               {[
-                "Predefine risk before entry (fixed R, no resizing mid-trade)",
-                "Place your stop loss beyond the protected high or low. If no protected swing exists, use the nearest previous protected swing or a few pips beyond the supply/demand zone.",
+                "Predefine risk before entry.",
+                "Place your stop loss beyond the protected H/L or a few pips beyond the supply/demand zone.",
                 "Set and Forget",
-                `If invalidation hits, you're done: exit and reassess, no "one more trade to make it back"`,
+                `If invalidation hits, you're done: exit, no "one more trade to make it back"`,
               ].map((rule, i) => (
                 <li key={i} className="flex items-start gap-2.5">
                   <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"/>
@@ -428,14 +428,14 @@ export default function StrategyPage() {
           </Section>
 
           {/* Trading Notes */}
-          <Section title="Trading Notes" icon="💡">
+          <Section title="Major Structure Identification Rules" icon="💡">
             <ul className="space-y-2.5">
               {[
-                "Bias is a plan + invalidation, not a prediction.",
-                "If you can't say your bias in one sentence, you don't have one.",
-                "If invalidation hits, reset. No coping, no revenge trade.",
-                `"You don't build trust in your system with affirmations. You build it with data."`,
-                "Conviction → confidence → competence → consistency.",
+                "BOS or CHOCH confirmed.",
+                "Create Internal Structure and liquidity clearly swept.",
+                "Strong one-sided displacement after the sweep.",
+                "The 0.5 (50%) level Taped.",
+                "Same TF Internal Structure Shift More reliable.",
               ].map((note, i) => (
                 <li key={i} className="flex items-start gap-2.5">
                   <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"/>
