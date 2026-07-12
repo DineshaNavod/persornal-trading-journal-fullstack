@@ -435,7 +435,8 @@ export default function StrategyPage() {
                 "Create Internal Structure and liquidity clearly swept.",
                 "Strong one-sided displacement after the sweep.",
                 "The 0.5 (50%) level Taped.",
-                "Same TF Internal Structure Shift More reliable.",
+                "Same TF Internal Structure Shift More reliable --> For trading conformation.",
+                "Must create 2 legs to oppercite direction for pull back conformation.",
               ].map((note, i) => (
                 <li key={i} className="flex items-start gap-2.5">
                   <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"/>
