@@ -76,8 +76,8 @@ function BucketTable({ buckets }: { buckets: Bucket[] }) {
     <div className="space-y-2">
       {/* Desktop header */}
       <div className="hidden grid-cols-[1.3fr_0.7fr_0.9fr_0.9fr] gap-2 px-2 text-[11px] font-semibold uppercase tracking-wide text-neutral-400 sm:grid">
-        <span>Label</span><span className="text-right">Trades</span>
-        <span className="text-right">Win Rate</span><span className="text-right">Total R</span>
+        <span>Label</span><span className="text-right">Win Rate</span>
+        <span className="text-right">Trades</span><span className="text-right">Total R</span>
       </div>
 
       {rows.map((r) => (
@@ -173,7 +173,15 @@ export default function AnalyticsPage() {
   const pairBuckets: Bucket[] = useMemo(() => {
     return FIXED_PAIRS.map((pair) => ({
       label: pair,
-      trades: filtered.filter((t) => (t.symbol?.name ?? "Other") === pair),
+      trades: filtered.filter((t) => {
+        const name = t.symbol?.name ?? null;
+        if (pair === "Other") {
+          // "Other" catches: explicit "Other" symbol + any unknown pair not in fixed list
+          return name === "Other" || name === null || 
+            !["GBPUSD","EURUSD","AUDUSD","GBPJPY"].includes(name ?? "");
+        }
+        return name === pair;
+      }),
     })).filter((b) => b.label !== "Other" || b.trades.length > 0);
   }, [filtered]);
 
