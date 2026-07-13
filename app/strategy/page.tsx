@@ -8,6 +8,11 @@ import {
 import { cn } from "@/lib/utils";
 import { uploadStrategyImage, getStrategyImageUrl, saveStrategyImageUrl, deleteStrategyImageUrl } from "@/lib/store";
 
+// Module-level image cache — persists across tab switches for the whole browser
+// session. After first load each slot is served from memory instantly with no
+// async round-trip, eliminating the blink entirely.
+const imageCache = new Map<string, string | null>();
+
 // ---------------------------------------------------------------------------
 // STRATEGY PAGE — CA+ SETUP
 // Fixed content. No edit. No admin toggle. Images uploadable + persistent.
@@ -105,23 +110,34 @@ function CtrlBtn({ onClick, children }: { onClick: () => void; children: React.R
 
 // ── Image slot ───────────────────────────────────────────────────────────────
 function ImageSlot({ storageKey, label }: { storageKey: string; label: string }) {
-  const [url, setUrl] = useState<string | null>(null);
+  // Initialise from cache synchronously — no async, no blink on re-mount
+  const [url, setUrl] = useState<string | null>(() => {
+    if (imageCache.has(storageKey)) return imageCache.get(storageKey) ?? null;
+    return null; // will be fetched in the effect below (first load only)
+  });
   const [uploading, setUploading] = useState(false);
   const [viewing, setViewing] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Load: Supabase table first, fallback to localStorage (local mode)
+  // Fetch from Supabase/localStorage only on the very first load (cache miss).
+  // After that, imageCache has the value and useState initialiser returns it
+  // immediately — this effect never fires again for that slot.
   useEffect(() => {
+    if (imageCache.has(storageKey)) return; // already cached, nothing to do
     let cancelled = false;
     getStrategyImageUrl(storageKey).then((u) => {
-      if (!cancelled) setUrl(u);
+      if (!cancelled) {
+        imageCache.set(storageKey, u);
+        setUrl(u);
+      }
     }).catch(() => {});
     return () => { cancelled = true; };
   }, [storageKey]);
 
   async function clear() {
     await deleteStrategyImageUrl(storageKey).catch(() => {});
+    imageCache.set(storageKey, null);
     setUrl(null);
     setUploadError(null);
   }
@@ -132,6 +148,7 @@ function ImageSlot({ storageKey, label }: { storageKey: string; label: string })
     try {
       const uploadedUrl = await uploadStrategyImage(file);
       await saveStrategyImageUrl(storageKey, uploadedUrl);
+      imageCache.set(storageKey, uploadedUrl);
       setUrl(uploadedUrl);
     } catch (e) {
       setUploadError(e instanceof Error ? e.message : "Upload failed.");
