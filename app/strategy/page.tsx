@@ -476,8 +476,8 @@ export default function StrategyPage() {
 
           <span
             className={
-              isTitle
-                ? "text-sm font-bold text-neutral-800 dark:text-neutral-200"
+                isTitle
+                ? "text-sm text-neutral-700 dark:text-neutral-200"
                 : "text-sm text-neutral-600 dark:text-neutral-300"
             }
           >
