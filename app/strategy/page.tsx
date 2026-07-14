@@ -446,15 +446,17 @@ export default function StrategyPage() {
           </Section>
 
           {/* Trading Notes */}
-          <Section title="Major Structure Identification Rules" icon="💡">
+          <Section title="TRADING NOTES" icon="💡">
             <ul className="space-y-2.5">
               {[
-                "BOS or CHOCH confirmed.",
-                "Create Internal Structure and liquidity clearly swept.",
-                "Strong one-sided displacement after the sweep.",
-                "The 0.5 (50%) level Taped.",
-                "Same TF Internal Structure Shift More reliable --> For trading conformation.",
-                "Must create 2 legs to oppercite direction for pull back conformation.",
+                "Trend --> Trade --> Trap --> Clear",
+                "Create Internal Structure and liquidity clearly swept Conform Major Structure",
+                "Best Trade Criteria (Tinity Pattern) :-",
+                "Liqudity Environment. (B&TLiq + TTL + SMT).",
+                "High Reactive Zones (Extream/Desicional/POI/FVG). ",
+                "Best Time To Smart Money Envolment (Kill zones).",
+                "Best Entry Criteria :-",
+                "Daily Cycle + Time Window + LTF Conformation + Inducements.",
               ].map((note, i) => (
                 <li key={i} className="flex items-start gap-2.5">
                   <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"/>
