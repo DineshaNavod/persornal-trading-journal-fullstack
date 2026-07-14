@@ -457,6 +457,8 @@ export default function StrategyPage() {
                 "Best Time To Smart Money Envolment (Kill zones).",
                 "Best Entry Criteria :-",
                 "Daily Cycle + Time Window + LTF Conformation + Inducements.",
+                "SMT divergence :-",
+                "DXY HH → EURUSD LH / DXY LL → EURUSD HL / EURUSD HH → GBPUSD LH / EURUSD LL → GBPUSD HL",
               ].map((note, i) => (
                 <li key={i} className="flex items-start gap-2.5">
                   <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"/>
