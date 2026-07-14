@@ -360,22 +360,22 @@ export default function StrategyPage() {
               {[
                 {
                   title: "Feelings are not a bias / framework",
-                  body: `"I feel like buying / I feel like selling" — this feeling is not a strategy.`,
-                },
-                {
-                  title: "Real bias comes from a plan",
-                  body: "↳ Requires you to figure out a target.\n↳ Requires you to figure out your invalidation.",
-                },
-                {
-                  title: "Trading in mid range",
-                  body: "↳ Not extreme / Not premium / Not discount",
-                },
-                {
-                  title: "Change bias on single candlestick",
                   body: "",
                 },
                 {
-                  title: "It's not trust — it's bias",
+                  title: "Real bias comes from a plan",
+                  body: "",
+                },
+                {
+                  title: "Trading in mid range",
+                  body: "",
+                },
+                {
+                  title: "Change bias Changing single candlestick",
+                  body: "",
+                },
+                {
+                  title: "Not Trust Your Bias/Your System",
                   body: "",
                 },
               ].map((m, i) => (
