@@ -446,27 +446,48 @@ export default function StrategyPage() {
           </Section>
 
           {/* Trading Notes */}
-          <Section title="TRADING NOTES" icon="💡">
-            <ul className="space-y-2.5">
-              {[
-                "Trend --> Trade --> Trap --> Clear",
-                "Create Internal Structure and liquidity clearly swept Conform Major Structure",
-                "Best Trade Criteria (Tinity Pattern) :-",
-                "Liqudity Environment. (B&TLiq + TTL + SMT).",
-                "High Reactive Zones (Extream/Desicional/POI/FVG). ",
-                "Best Time To Smart Money Envolment (Kill zones).",
-                "Best Entry Criteria :-",
-                "Daily Cycle + Time Window + LTF Conformation + Inducements.",
-                "SMT divergence :-",
-                "DXY HH → EURUSD LH / DXY LL → EURUSD HL / EURUSD HH → GBPUSD LH / EURUSD LL → GBPUSD HL",
-              ].map((note, i) => (
-                <li key={i} className="flex items-start gap-2.5">
-                  <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"/>
-                  <span className="text-sm text-neutral-600 dark:text-neutral-300">{note}</span>
-                </li>
-              ))}
-            </ul>
-          </Section>
+<Section title="TRADING NOTES" icon="💡">
+  <ul className="space-y-2.5">
+    {[
+      "Trend --> Trade --> Trap --> Clear",
+      "Create Internal Structure and liquidity clearly swept Conform Major Structure",
+      "Best Trade Criteria (Tinity Pattern) :-",
+      "Liqudity Environment. (B&TLiq + TTL + SMT).",
+      "High Reactive Zones (Extream/Desicional/POI/FVG).",
+      "Best Time To Smart Money Envolment (Kill zones).",
+      "Best Entry Criteria :-",
+      "Daily Cycle + Time Window + LTF Conformation + Inducements.",
+      "SMT divergence :-",
+      "DXY HH → EURUSD LH / DXY LL → EURUSD HL / EURUSD HH → GBPUSD LH / EURUSD LL → GBPUSD HL",
+    ].map((note, i) => {
+      const isTitle =
+        note === "Best Trade Criteria (Tinity Pattern) :-" ||
+        note === "Best Entry Criteria :-" ||
+        note === "SMT divergence :-";
+
+      return (
+        <li
+          key={i}
+          className={isTitle ? "mt-4 list-none" : "flex items-start gap-2.5"}
+        >
+          {!isTitle && (
+            <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"/>
+          )}
+
+          <span
+            className={
+              isTitle
+                ? "text-sm font-bold text-neutral-800 dark:text-neutral-200"
+                : "text-sm text-neutral-600 dark:text-neutral-300"
+            }
+          >
+            {note}
+          </span>
+        </li>
+      );
+    })}
+  </ul>
+</Section>
 
         </div>{/* end right */}
       </div>
