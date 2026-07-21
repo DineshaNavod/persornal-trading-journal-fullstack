@@ -229,7 +229,7 @@ export function TradeFormModal({ onClose }: { onClose: () => void }) {
             </div>
 
             <div>
-              <label className="field-label">Liquidity sweep</label>
+              <label className="field-label">Asian Session Sweep</label>
               <div className="grid grid-cols-2 gap-2">
                 <button type="button" onClick={() => setLqSweep(true)}
                   className={cn(
