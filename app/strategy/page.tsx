@@ -449,19 +449,18 @@ export default function StrategyPage() {
 <Section title="TRADING NOTES" icon="💡">
   <ul className="space-y-2.5">
     {[
-      "Trend --> Trade --> Trap --> Clear",
-      "Create Internal Structure and liquidity clearly swept Conform Major Structure",
-      "Best Trade Criteria (Tinity Pattern) :-",
-      "Liqudity Environment. (B&TLiq + TTL + SMT).",
-      "High Reactive Zones (Extream/Desicional/POI/FVG).",
-      "Best Time To Smart Money Envolment (Kill zones).",
+      "The Domino Effect :-",
+      "Mark the POI + Liquidity.",
+      "Price enters the POI OR Sweep happens",
+      "Displacement 5M CHOCH.",
+      "Enter The Retest.",
       "Best Entry Criteria :-",
       "Daily Cycle + Time Window + LTF Conformation + Inducements.",
       "SMT divergence :-",
       "DXY HH → EURUSD LH / DXY LL → EURUSD HL / EURUSD HH → GBPUSD LH / EURUSD LL → GBPUSD HL",
     ].map((note, i) => {
       const isTitle =
-        note === "Best Trade Criteria (Tinity Pattern) :-" ||
+        note === "The Domino Effect :-" ||
         note === "Best Entry Criteria :-" ||
         note === "SMT divergence :-";
 
