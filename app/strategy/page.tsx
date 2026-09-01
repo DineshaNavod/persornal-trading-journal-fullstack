@@ -269,13 +269,13 @@ export default function StrategyPage() {
             <ol className="space-y-3">
               {[
                 "Mark 1W/1D FVG + PWH/L + PDH/L.",
-                "Mark HTF range(4H) + premium/discount + POI. --> (Trend)",
-                "Mark liquidity (equal H/L + Session H/L + TLL + STRONG S&R). --> (Trap)",
-                "Decide continuation vs pullback vs reversal. --> (Trade)",
-                "SWITCH MTF(1H/15M) + Mark range + premium/discount + POI. --> (Trend)",
+                "Mark HTF range(4H) + premium/discount + POI + Old H/L.",
+                "Mark liquidity (equal H/L + Session H/L + TLL + STRONG S&R).",
+                "Decide continuation vs pullback vs reversal.",
+                "SWITCH MTF(1H/15M) + Mark range + premium/discount + POI.",
                 "CHECK HOW CORRELATED ASSETS ARE MOVING.",
                 "WAIT COME TO THAT ZONES + SHIFT LTF(5M) + WAIT MSS/LTWO LEG CONFORMATION.",
-                "PICK ONE TARGET + DEFINE INVALIDATION + HOLD. --> (Clear)",
+                "PICK ONE TARGET + DEFINE INVALIDATION + HOLD.",
               ].map((step, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <span className={cn(
