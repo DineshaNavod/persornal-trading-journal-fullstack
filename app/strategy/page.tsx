@@ -249,10 +249,13 @@ export default function StrategyPage() {
             <ol className="space-y-2.5">
               {[
                 "Check Economic calendar",
-                "Review Your trading Plan",
                 "Analyze DXY for better Planning",
-                "Analyze the chart",
-                "Meditation / Relax",
+                "See previous day candle + market structure",
+                "Define target — PDH / PDL + FVGs",
+                "Check if target has already been reached",
+                "Mark Midnight Open + define Premium / Discount",
+                "On 15M, mark Quarterly Range 4",
+                "Follow charting process",
               ].map((item, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-light text-xs font-bold text-accent dark:bg-accent/15">
@@ -268,7 +271,7 @@ export default function StrategyPage() {
           <Section title="Charting Process" icon="📈">
             <ol className="space-y-3">
               {[
-                "Mark 1W/1D FVG + PWH/L + PDH/L.",
+                "Build the story to achieve the previously defined target.",
                 "Mark HTF range(4H) + premium/discount + POI + Old H/L.",
                 "Mark liquidity (equal H/L + Session H/L + TLL + STRONG S&R).",
                 "Decide continuation vs pullback vs reversal.",
@@ -454,14 +457,11 @@ export default function StrategyPage() {
       "Price enters the POI OR Sweep happens",
       "Displacement 5M CHOCH.",
       "Enter The Retest.",
-      "Best Entry Criteria :-",
-      "Daily Cycle + Time Window + LTF Conformation + Inducements.",
       "SMT divergence :-",
       "DXY HH → EURUSD LH / DXY LL → EURUSD HL / EURUSD HH → GBPUSD LH / EURUSD LL → GBPUSD HL",
     ].map((note, i) => {
       const isTitle =
         note === "The Domino Effect :-" ||
-        note === "Best Entry Criteria :-" ||
         note === "SMT divergence :-";
 
       return (
