@@ -332,7 +332,7 @@ export default function StrategyPage() {
           </Section>
 
           {/* Trade Management */}
-          <Section title="Trade Management Rules" icon="📝">
+          <Section title="Risk Management Rules" icon="📝">
             <ul className="space-y-3">
               {[
 "A+ setups risk $10, while B+ setups risk $5. Must follow the trading plan and setup.",
