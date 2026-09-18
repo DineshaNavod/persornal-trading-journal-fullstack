@@ -268,15 +268,15 @@ export default function StrategyPage() {
           <Section title="Charting Process" icon="📈">
             <ol className="space-y-3">
               {[
-                "Mark 1W/1D FVG + PWH/L + PDH/L.",
-                "Define target(Single Candle Bias) — PDH/L + PWH/L + FVGs.",
-                "Mark HTF range(4H) + premium/discount + Old H/L + POI +  STRONG S&R.",
-                "Mark liquidity On 4H/1H/15M - (equal H/L + Session H/L + TLL).",
-                "Decide continuation vs pullback vs reversal.",
-                "SWITCH MTF(1H/15M) + Mark range + premium/discount + POI.",
-                "CHECK HOW CORRELATED ASSETS ARE MOVING + SMT.",
-                "WAIT COME TO THAT ZONES + SHIFT LTF(5M) + WAIT MSS/LTWO LEG CONFORMATION.",
-                "PICK ONE TARGET + DEFINE INVALIDATION + Let the candle print.",
+      "Mark 1W/1D FVG + PWH/L + PDH/L.",
+      "Define Target (Single Candle Bias) — PDH/L + PWH/L + FVGs.",
+      "Mark HTF Range (4H) + Premium/Discount + Old H/L + POI + Strong S&R.",
+      "Mark Liquidity on 4H/1H/15M — (Equal H/L + Session H/L + TLL).",
+      "Decide Continuation vs Pullback vs Reversal.",
+      "Switch MTF (1H/15M) + Mark Range + Premium/Discount + POI.",
+      "Check How Correlated Assets Are Moving + SMT.",
+      "Wait for Price to Come to Those Zones + Shift LTF (5M) + Wait for MSS/LTWO Leg Confirmation.",
+      "Pick One Target + Define Invalidation + Let the Candle Print.",
               ].map((step, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <span className={cn(
@@ -335,10 +335,10 @@ export default function StrategyPage() {
           <Section title="Trade Management Rules" icon="📝">
             <ul className="space-y-3">
               {[
-                "Predefine risk before entry.",
-                "Place your stop loss beyond the protected H/L or a few pips beyond the supply/demand zone.",
-                "Set and Forget",
-                `If invalidation hits, you're done: exit, no "one more trade to make it back"`,
+"A+ setups risk $10, while B+ setups risk $5. Must follow the trading plan and setup.",
+"Target 1:2 or 1:3+ as TP. Never risk more than $10 on a trade.",
+"Never change the SL or add to position size.",
+"Maximum one EURUSD trade at a time. No second entry unless the first trade is at breakeven.",
               ].map((rule, i) => (
                 <li key={i} className="flex items-start gap-2.5">
                   <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"/>
@@ -451,16 +451,10 @@ export default function StrategyPage() {
 <Section title="TRADING NOTES" icon="💡">
   <ul className="space-y-2.5">
     {[
-      "The Domino Effect :-",
-      "Mark the POI + Liquidity.",
-      "Price enters the POI OR Sweep happens",
-      "Displacement 5M CHOCH.",
-      "Enter The Retest.",
       "SMT divergence :-",
       "DXY HH → EURUSD LH / DXY LL → EURUSD HL / EURUSD HH → GBPUSD LH / EURUSD LL → GBPUSD HL",
     ].map((note, i) => {
       const isTitle =
-        note === "The Domino Effect :-" ||
         note === "SMT divergence :-";
 
       return (
