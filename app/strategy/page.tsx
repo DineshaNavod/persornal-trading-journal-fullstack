@@ -222,7 +222,7 @@ const ENTRY_CRITERIA = [
   "High Probability POI",
   "LQ Sweep + Market Shift",
   "During Killzone",
-  "Asymmetric Risk to Reward",
+  "1:2 OR 1:3+ RR",
 ];
 
 // ── Main page ────────────────────────────────────────────────────────────────
@@ -249,13 +249,10 @@ export default function StrategyPage() {
             <ol className="space-y-2.5">
               {[
                 "Check Economic calendar",
+                "Review Your trading Plan",
                 "Analyze DXY for better Planning",
-                "See previous day candle + market structure",
-                "Define target — PDH / PDL + FVGs",
-                "Check if target has already been reached",
-                "Mark Midnight Open + define Premium / Discount",
-                "On 15M, mark Quarterly Range 4",
-                "Follow charting process",
+                "Analyze the chart",
+                "Meditation / Relax",
               ].map((item, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-light text-xs font-bold text-accent dark:bg-accent/15">
@@ -271,14 +268,15 @@ export default function StrategyPage() {
           <Section title="Charting Process" icon="📈">
             <ol className="space-y-3">
               {[
-                "Build the story to achieve the previously defined target.",
-                "Mark HTF range(4H) + premium/discount + POI + Old H/L.",
-                "Mark liquidity (equal H/L + Session H/L + TLL + STRONG S&R).",
+                "Mark 1W/1D FVG + PWH/L + PDH/L.",
+                "Define target(Single Candle Bias) — PDH/L + PWH/L + FVGs.",
+                "Mark HTF range(4H) + premium/discount + Old H/L + POI +  STRONG S&R.",
+                "Mark liquidity On 4H/1H/15M - (equal H/L + Session H/L + TLL).",
                 "Decide continuation vs pullback vs reversal.",
                 "SWITCH MTF(1H/15M) + Mark range + premium/discount + POI.",
-                "CHECK HOW CORRELATED ASSETS ARE MOVING.",
+                "CHECK HOW CORRELATED ASSETS ARE MOVING + SMT.",
                 "WAIT COME TO THAT ZONES + SHIFT LTF(5M) + WAIT MSS/LTWO LEG CONFORMATION.",
-                "PICK ONE TARGET + DEFINE INVALIDATION + HOLD.",
+                "PICK ONE TARGET + DEFINE INVALIDATION + Let the candle print.",
               ].map((step, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <span className={cn(
@@ -350,14 +348,15 @@ export default function StrategyPage() {
             </ul>
           </Section>
 
-          {/* Exit Criteria */}
-          <Section title="Secret of Trading Success" icon="🎯">
-            <p className="text-sm text-neutral-700 dark:text-neutral-200">
-              No capital = no trade.<strong> Protect survival first,</strong> profits come second.
-            </p>
-          </Section>
+         {/* Exit Criteria
+            <Section title="Secret of Trading Success" icon="🎯">
+              <p className="text-sm text-neutral-700 dark:text-neutral-200">
+                No capital = no trade. <strong>Protect survival first,</strong> profits come second.
+              </p>
+            </Section>
+        */}
 
-          {/* Common Mistakes */}
+          {/* Common Mistakes 
           <Section title="Common Mistakes" icon="⚠️">
             <ol className="space-y-4">
               {[
@@ -397,7 +396,7 @@ export default function StrategyPage() {
                 </li>
               ))}
             </ol>
-          </Section>
+          </Section>*/}
 
         </div>{/* end left */}
 
